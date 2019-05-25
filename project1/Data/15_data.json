@@ -1,0 +1,86 @@
+[
+  {
+    "service": "Apple Music",
+    "revenue_per_play_signed": "$0.00129720",
+    "revenue_per_play_unsigned": "",
+    "label_cut_signed": "55%",
+    "label_cut_unsigned": 0,
+    "distributer_retailer_cut_signed": "25%",
+    "distributer_retailer_cut_unsigned": "",
+    "artist_writer_cut_signed": "20%",
+    "artist_writer_cut_unsigned": "",
+    "streaming_site_subscribers": "15,000,000"
+  },
+  {
+    "service": "Deezer",
+    "revenue_per_play_signed": "$0.00100000",
+    "revenue_per_play_unsigned": "$0.01300000",
+    "label_cut_signed": "55%",
+    "label_cut_unsigned": 0,
+    "distributer_retailer_cut_signed": "25%",
+    "distributer_retailer_cut_unsigned": "40%",
+    "artist_writer_cut_signed": "20%",
+    "artist_writer_cut_unsigned": "60%",
+    "streaming_site_subscribers": "16,000,000"
+  },
+  {
+    "service": "Google Play",
+    "revenue_per_play_signed": "$0.00731680",
+    "revenue_per_play_unsigned": "$0.01790",
+    "label_cut_signed": "55%",
+    "label_cut_unsigned": 0,
+    "distributer_retailer_cut_signed": "25%",
+    "distributer_retailer_cut_unsigned": "40%",
+    "artist_writer_cut_signed": "20%",
+    "artist_writer_cut_unsigned": "60%",
+    "streaming_site_subscribers": "n/a"
+  },
+  {
+    "service": "Napster",
+    "revenue_per_play_signed": "$0.00193600",
+    "revenue_per_play_unsigned": "$0.01210000",
+    "label_cut_signed": "55%",
+    "label_cut_unsigned": 0,
+    "distributer_retailer_cut_signed": "25%",
+    "distributer_retailer_cut_unsigned": "40%",
+    "artist_writer_cut_signed": "20%",
+    "artist_writer_cut_unsigned": "60%",
+    "streaming_site_subscribers": "2,000,000"
+  },
+  {
+    "service": "Spotify",
+    "revenue_per_play_signed": "$0.00112800",
+    "revenue_per_play_unsigned": "$0.00700000",
+    "label_cut_signed": "55%",
+    "label_cut_unsigned": 0,
+    "distributer_retailer_cut_signed": "25%",
+    "distributer_retailer_cut_unsigned": "40%",
+    "artist_writer_cut_signed": "20%",
+    "artist_writer_cut_unsigned": "60%",
+    "streaming_site_subscribers": "75,000,000"
+  },
+  {
+    "service": "Tidal",
+    "revenue_per_play_signed": "$0.00700000",
+    "revenue_per_play_unsigned": "$0.04300000",
+    "label_cut_signed": "55%",
+    "label_cut_unsigned": 0,
+    "distributer_retailer_cut_signed": "25%",
+    "distributer_retailer_cut_unsigned": "40%",
+    "artist_writer_cut_signed": "20%",
+    "artist_writer_cut_unsigned": "60%",
+    "streaming_site_subscribers": "1,000,000"
+  },
+  {
+    "service": "YouTube",
+    "revenue_per_play_signed": "$0.00030000",
+    "revenue_per_play_unsigned": "$0.00180000",
+    "label_cut_signed": "55%",
+    "label_cut_unsigned": 0,
+    "distributer_retailer_cut_signed": "25%",
+    "distributer_retailer_cut_unsigned": "80%",
+    "artist_writer_cut_signed": "20%",
+    "artist_writer_cut_unsigned": "20%",
+    "streaming_site_subscribers": "1,000,000,000"
+  }
+]

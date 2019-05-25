@@ -1,0 +1,195 @@
+<html>
+
+<head>
+  <title>INFO 3300 - Data-driven Web Pages</title>
+
+  <script src="https://d3js.org/d3.v5.min.js"></script>
+
+  <style>
+    #text-block {
+      width: 40%;
+      text-align: justify;
+      font-size: 20;
+      box-sizing: border-box;
+      padding: 40px;
+    }
+
+    #text-block2 {
+      text-align: center;
+      padding-left: 40px;
+      padding-right: 40px;
+    }
+
+    #text-block3 {
+      width: 50%;
+      text-align: justify;
+      font-size: 20;
+      padding-left: 5%;
+      height: 30%;
+      padding-top: 13%;
+      text-align: center;
+    }
+
+    #text-block4 {
+      width: 40%;
+      text-align: justify;
+      font-size: 20;
+      box-sizing: border-box;
+      padding-top: 15%;
+      text-align: center;
+      padding-left: 40px;
+    }
+
+
+    #cut {
+      width: 60%;
+      padding-top: 5%;
+    }
+
+    #users {
+      width: 40%;
+      height: 80%;
+
+    }
+
+    #revenue10x {
+      width: 60%;
+    }
+
+    #row1 {
+      display: -webkit-box;
+      flex-direction: row;
+      flex-wrap: wrap;
+      justify-content: center;
+      align-items: center;
+      box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+      border-radius: 25px;
+    }
+
+    #row2 {
+      margin-top: 50px;
+      padding: 40px;
+      flex-wrap: wrap;
+      justify-content: center;
+      align-items: center;
+      box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+      border-radius: 25px;
+    }
+
+    #row3 {
+      margin-top: 50px;
+      padding: 40px;
+      display: -webkit-box;
+      flex-direction: row;
+      flex-wrap: wrap;
+      justify-content: center;
+      align-items: center;
+      box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+      border-radius: 25px;
+    }
+
+    #row4 {
+      margin-top: 50px;
+      padding: 40px;
+      display: -webkit-box;
+      flex-direction: row;
+      flex-wrap: wrap;
+      justify-content: center;
+      align-items: center;
+      box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+      border-radius: 25px;
+    }
+
+    #caption {
+      font-style: italic;
+      font-size: 22;
+    }
+
+    #subcaption {
+      font-size: 20;
+      font-weight: 800;
+    }
+
+    body {
+      width: 60%;
+      width: 90%;
+      margin-left: auto;
+      margin-right: auto;
+      text-align: center;
+      font-family: avenir;
+    }
+  </style>
+
+
+</head>
+
+<body>
+  <h1 id="title">Which Streaming Music Services Are Best for Artists?</h1>
+  <h2 id="subtitle">Francis Rayos del Sol (fmr32) | Sam Robiner (smr276) | Rosie Ross (rwr238)</h2>
+
+  <section id="row1">
+    <div class="item" id="text-block">
+      <p id='caption'>Music streaming services provide users with a quick, easy, and typically
+        cheap way to listen to millions of songs. But are these services as beneficial
+        to artists? Do the most popular services among listeners give musicians fair
+        pay? And how is this different for signed vs. independent artists? We found
+        the answers to these questions by comparing the following popular streaming services:
+        Apple Music, Deezer, Google Play, Napster, Spotify, and Tidal.</p>
+
+      <p id='subcaption'> The chart to the right displays how independent and signed artists
+        split their money with the streaming service and their label. Independent artists
+        earn a larger piece of their raw profits, but they lose out on the resources and connections
+        a label might provide them with.</a> </p>
+    </div>
+
+    <div class="item" id="cut"></div>
+  </section>
+
+  <section id="row3">
+    <div class="item" id="text-block4">
+      <p id='caption'> If I replay my fav artist's song ten thousand times will they notice? </p>
+      <p id='subcaption'> This chart shows the earnings of an artist if they get 10,000 plays on a service.
+         If you're a Napster user you might be able to get your fav a few hundred dollars. </p>
+    </div>
+    <div class="item" id="revenue10x"></div>
+
+  </section>
+
+
+
+  <section id="row4">
+    <div class="item" id="users"></div>
+    <div class="item" id="text-block3">
+
+      <p id='caption'> How popular is each service? </p>
+      <p id='subcaption'> This chart shows how many paid and free users each service has. Now it's clear how artists
+        can still make a profit on a service like Spotify - which pays an artist so little for each song play. </p>
+    </div>
+  </section>
+
+  <section id="row2">
+
+    <div class="item" id="text-block2">
+      <p id='caption'> So how popular does an artist have to be to earn minimum wage? </p>
+      <p id='subcaption'> The music staff shows the difference between an independent and a signed artists'
+        necessary popularity for each streaming service. The minimum wage used is $1,472 a month, which is the equivalent of
+        working full time for $9.20 an hour. The top of the chart shows the number of song plays
+        necessary to reach minimum wage while the bottom shows what percentage of the service's users would have to play
+        the artists music. Note how for Spotify the number of plays required is very high, but the % of their users that
+        would have to listen is fairly low.</p>
+    </div>
+
+
+        <div class="item" id="min-wage"></div>
+      </section>
+
+
+  <script src="Code/cut.js?v=1"></script>
+  <script src="Code/min-wage.js?v=1"></script>
+  <script src="Code/users.js?v=1"></script>
+  <script src="Code/revenue10x.js?v=1"></script>
+
+
+</body>
+
+</html>
