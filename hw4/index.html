@@ -1,0 +1,380 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+<title>CS 3300: Homework 4 - Francis Rayos del Sol</title>
+<script src="https://d3js.org/d3.v5.min.js"></script>
+
+</head>
+<body>
+
+	<h2>CS 3300: Assignment 4</h2>
+	<h3>Francis Rayos del Sol - fmr32</h3>
+
+	<p id="p1"><strong>Problem 1: You have now seen a few scatterplots in class as well as developed your own in HW3. In this problem you will once again be developing a scatterplot, however this time many of the specific design features of the plot will be left to you. Inside the homework ZIP file you will find blockbusters.json, a dataset of the top 10 highest grossing movies for each year from 2018 to 1975. Please use this dataset for the rest of the problem. For each of the following sub-problems, please briefly explain your procedure or design rationale for that step (e.g. How did you decide on axis scale labels? What made you choose a linear/log scale? What compromises did you make [such as hiding some numbers so the axes are easier to read)?].</strong></p>
+
+	<p>In Part A, I got rid of the cases that had NaN as an attribute and had random letters as the title. To do the filtering, I changed all of the elements to ints so that comparisons were somewhat easier. I  ensured that the element year was between 1975 and 2018 and filtered the dataset out so that the ranking of the movies ranged from 1 to 10. Finally, I made sure that the gross amounts and the length of the movies were not equal to zero.</p>
+
+	<p>In Parts B and C, some of my key decisions for building the graph revolved around scaling and making sure all of the data points were clearly visible. In the x-axis, I made the scale linear while in the y-axis, I made the scale logarithmic because I saw that a majority of the data points concerning the worldwide gross amount were too close together on a linear scale. Thus, changing it to a logarithmic scale spread out the points more so that the mouse could hover over them. I also made the original sizes of the circles relatively small (a range of 0-8) so the overlap wasn't too overbearing between circles. Furthermore, I noticed that when I created a new set of unique genres, there were a total of 16 genres, and the schemeCategory10 we used in class only had ten colors, so for the range of scaleOrdinal which assigned colors to the circles, I manually coded in 16 distinct colors that Javascript recognizes. Finally, I also made the starting tick of the x-axis to be 1970 so that the leftmost circles didn't cover the y-axis line and subtracted 5,000,000 from the minGross value so that it wouldn't cover the x-axis.</p>
+
+	<p>In Part D, because there is a mouseover function, one of the benefits to users is that it presents the data in an organized way, especially when a user is hovering over a specfic plot point because it allows the user to know exactly which point he or she is referencing. However, at the same time, there is some confusion when there are a lot of points in the dataset, which could potentially result in significant overlapping. And if some radii are larger than others, it could block the smaller circles that are in the same year and have relatively the same max gross amount.</p>
+
+		<script>
+			// Part A
+
+			var blockbustersData;
+
+			d3.json("blockbusters.json").then(function(data) {
+				blockbustersData = data;
+
+				data.forEach(function(d) {
+					d.rank_in_year = Number(d.rank_in_year);
+					d.length = Number(d.length);
+					d.imdb_rating = Number(d.imdb_rating);
+					d.year = Number(d.year);
+					d.worldwide_gross = parseFloat(d.worldwide_gross.replace(/\$/g,'').replace(/,/g , "").trim());
+				})
+				
+				 data = data.filter(element => element.year >= 1975 && element.year <= 2018 && element.worldwide_gross != 0 && element.length != 0 && element.rank_in_year >= 1 && element.rank_in_year <= 10);
+
+				console.log(data);
+
+				// Part B
+
+				let width = 800;
+				let height = 500;
+
+				let paddingLeft = 75;
+				let paddingRight = 50;
+				let paddingTop = 50;
+				let paddingBottom = 50;
+
+				let plotWidth = width - paddingLeft - paddingRight;
+				let plotHeight = height - paddingTop - paddingBottom;
+
+				let minYear = d3.min(data, d => d.year);
+				let maxYear = d3.max(data, d => d.year);
+
+				let minGross = d3.min(data, d => d.worldwide_gross);
+				let maxGross = d3.max(data, d => d.worldwide_gross);
+
+				console.log(minGross);
+				console.log(maxGross);
+
+				// Append SVG
+
+				let svg = d3.select("p#p1")
+					.append("svg")
+					.attr("width", width)
+					.attr("height", height)
+					.style("background-color", "F5F5F5");
+
+				let x_scale = d3.scaleLinear()
+					.domain([minYear - 5, 2020])
+					.range([0, plotWidth])
+
+				let y_scale = d3.scaleLog()
+					.domain([minGross - 5000000, maxGross])
+					.range([plotHeight, 0])
+
+				// Append X & Y Axes
+
+				let x_axis = d3.axisBottom(x_scale)
+					.tickValues([1970, 1975, 1980, 1985, 1990, 1995, 2000, 2005, 2010, 2015, 2020])
+					.tickSize(0)
+					.tickPadding(10);
+
+				let y_axis = d3.axisLeft(y_scale)
+					.ticks(15)
+					.tickSize(0)
+					.tickPadding(10);
+
+				svg.append("g")
+					.attr("transform", "translate(" + paddingLeft + "," + (paddingTop + plotHeight) + ")")
+					.call(x_axis);
+
+				svg.append("g")
+					.attr("transform", "translate(" + paddingLeft + "," + paddingTop + ")")
+					.call(y_axis);
+
+				// Append X & Y Gridlines
+
+				for (i = 1975; i <= 2020; i = i + 5) {
+					svg.append("line")
+						.attr("x1", x_scale(i))
+	                    .attr("y1", y_scale(minGross-5000000))
+	                    .attr("x2", x_scale(i))
+	                    .attr("y2", y_scale(maxGross))
+	                    .attr("transform", "translate(" + paddingLeft + "," + paddingTop + ")")
+	                    .style("stroke", "lightgrey");
+				}
+
+				for (i = minGross; i <= maxGross; i = i + 200000000) {
+					svg.append("line")
+						.attr("x1", x_scale(1970))
+	                    .attr("y1", y_scale(i))
+	                    .attr("x2", x_scale(2020))
+	                    .attr("y2", y_scale(i))
+	                    .attr("transform", "translate(" + paddingLeft + "," + paddingTop + ")")
+	                    .style("stroke", "lightgrey");
+
+				}
+
+				// Part C & D
+
+				let color_scale = d3.scaleOrdinal()
+					.range(["fuschia", "goldenrod", "indigo", "lightcoral", "lightgreen", "lightskyblue", "slategrey", "mistyrose", "chartreuse", "orange", "rebeccapurple", "saddlebrown", "cornflowerblue", "tomato", "yellow", "magenta"]);
+
+				data.forEach(function(d) {
+
+					function varyCicles() {
+						let imdbMin = d3.min(data, d => d.imdb_rating);
+	    				let imdbMax = d3.max(data, d => d.imdb_rating);
+	   					let imdbScale = d3.scaleLinear()
+	            			.domain([imdbMin, imdbMax])
+	            			.range([0, 8]); 
+	            		let imdb_radius = imdbScale(d.imdb_rating);
+						return imdb_radius;
+					}
+
+					let color_fill = color_scale(d.Main_Genre);
+
+					let circle = svg.append("circle")
+						.attr("r", varyCicles())
+						.attr("cx", Math.floor(x_scale(d.year)))
+						.attr("cy", Math.floor(y_scale(d.worldwide_gross)))
+						.attr("transform", "translate(" + paddingLeft + ", " + paddingTop + ")")
+						.attr("opacity", 0.5)
+						.style("fill", color_fill);
+
+
+					let cursor_x = x_scale(d.year + 5);
+					let cursor_y = y_scale(d.worldwide_gross - 5);
+
+					circle.on("mouseover", function() {
+						d3.select(this)
+							.transition().duration(50)
+							.attr("r", varyCicles()*1.5);
+
+						svg.append("text")
+				            .attr("id", d["title"].replace(/[ _\-,.:&'#!\?0123456789]/g,""))
+				        	.attr("x", cursor_x)
+				            .attr("y", cursor_y + 25)
+				            .text(d.title);
+					});
+
+					circle.on("mouseout", function() {
+						d3.select(this)
+							.transition().duration(50)
+							.attr("r", varyCicles());
+						d3.select("#" + d["title"].replace(/[ _\-,.&:'#!\?0123456789]/g,"")).remove();
+					});
+
+				})
+
+				// For figuring out how many unique movie genres there are
+				let genres = [...new Set(data.map(data => data.Main_Genre))];
+				console.log(genres);
+
+			});
+
+		</script>
+
+		<p id="p2"><strong>Problem 2:  In this problem you will simulate projectile motion under the influence of gravity using a finite approximation, where we estimate a ball position every 0.1 seconds. Physics review: keep track of the position (displacement), velocity, and acceleration for the x and y dimensions separately. The finished work should look similar to the diagram, but does not need to replicate it exactly.</strong></p>
+
+		<!-- Included in Lab Document -->
+		<svg id="gravity" height="400" width="400">
+			<g id="background" style="stroke: #000; stroke-width: 2px; fill: none;">
+			<!--- Wall is 13 meters from pitcher. 20 meters tall and 4 meters thick. Target is between 8 meters and 18 meters from the wall. --->
+			<path d="M75 350 H 140 V 250 H 160 V 350 H 350"/>
+			<!--- 1 meter is 5px, so our pitcher is at (15,10) from the lower left corner ---> <circle id="pitcher" cx="75" cy="350" r="5" style="fill: #EEF"/>
+			<!-- Our target is between (40,10) and (50,10) from the lower left --->
+			<rect id="target" x="200" y="350" width="50" height="10" style="fill: #FDD"/>
+			</g>
+		</svg>
+
+		<script>
+			// Part A
+
+			let width = 400;
+			let height = 400;
+
+			let x_dimension = d3.scaleLinear()
+				.domain([0, 55])
+				.range([75, 350]);
+
+			let y_dimension = d3.scaleLinear()
+				.domain([0, 20])
+				.range([350, 250]);
+
+			let svg_gravity = d3.select("svg#gravity")
+				.style("background-color", "F5F5F5");
+
+			// Part B
+			function trajectory(initialVelocity, angle) {
+				var ground, x, y, xVelocity, yVelocity, xAcceleration, yAcceleration, initialxVelocity, initialyVelocity;
+
+				ground = 0;
+				yVelocity = initialVelocity * Math.sin(angle/180*(Math.PI));
+				xVelocity = initialVelocity * Math.cos(angle/180*(Math.PI));
+				xAcceleration = 0;
+				yAcceleration = -(3.71 / 10);
+				x = 0;
+				y = 0;
+
+				let new_array = [{
+						"ground": ground,
+						"x": x,
+						"y": y,
+						"xVelocity": xVelocity,
+						"yVelocity": yVelocity,
+						"xAcceleration": xAcceleration,
+						"yAcceleration": yAcceleration
+					}];
+
+				while (y >= ground) {
+					
+					xVelocity = xVelocity + xAcceleration;
+					yVelocity = yVelocity  + yAcceleration;
+
+					x = x + (0.1 * xVelocity);
+					y = y + (0.1 * yVelocity);
+
+					if (x >= 13 && x <= 17) {
+						ground = 20;
+					} else {
+						ground = 0;
+					}
+
+					new_array.push({
+						"ground": ground,
+						"x": x,
+						"y": y,
+						"xVelocity": xVelocity,
+						"yVelocity": yVelocity,
+						"xAcceleration": xAcceleration,
+						"yAcceleration": yAcceleration
+					})
+				}
+				console.log(new_array);
+				return new_array;
+				
+			};
+
+			// Part C
+
+			function hitOrMiss (array) {
+				if (array[array.length - 1].x >= 25 && array[array.length - 1].x <= 35) {
+						return "HIT";
+					} else {
+						return "MISS";
+					}
+			}
+
+			function flightTime (array) {
+				positionToTime = array.length * 0.1;
+				return positionToTime.toFixed(1);
+			}
+
+			// Pythagorean Theoream
+
+			function takeOfftoLanding (array) {
+				let final_x = array[array.length - 1].x;
+				let final_y = array[array.length - 1].y;
+				takeOffTime = Math.sqrt(Math.pow(final_x, 2) + Math.pow(final_y, 2));
+				return takeOffTime.toFixed(2);
+			}
+
+			function fixOverlapping (array) {
+				if (hitOrMiss(array) == "HIT") {
+					return array[array.length - 1].y + 5;
+				}
+				if (hitOrMiss(array) == "MISS") {
+					return array[array.length - 1].y + 2;
+				}
+			}
+
+			function plotTrajectory(array, color) {
+				let trajectoryPath = d3.line()
+					.x(function (d) { return x_dimension(d.x); })
+					.y(function (d) { return y_dimension(d.y); })
+
+				svg_gravity.append("path")
+					.datum(array)
+					.attr("d", trajectoryPath)
+					.attr("opacity", 0.25)
+					.attr("fill", "none")
+					.style("stroke", color)
+					.style("stroke-width", 3);
+
+				svg_gravity.append("text")
+					.attr("x", x_dimension(array[array.length - 1].x + 0.2))
+					.attr("y", y_dimension(fixOverlapping(array)))
+					.style("font-size", "8px")
+					.style("font-family", "Arial")
+					.text(hitOrMiss(array) + ", " + flightTime(array).toString() + "s, " +takeOfftoLanding(array).toString() + "m");
+			};
+
+			// Part D
+
+			plotTrajectory(trajectory(14, 75), "#0000FF"); // #0000FF is blue in hex
+			plotTrajectory(trajectory(16, 80), "#0000FF");
+			plotTrajectory(trajectory(10, 65), "#0000FF");
+
+			// Part E
+
+			function trajectoryWithWind(initialVelocity, angle, windAcceleration) {
+				var ground, x, y, xVelocity, yVelocity, xAcceleration, yAcceleration, initialxVelocity, initialyVelocity;
+
+				ground = 0;
+				yVelocity = initialVelocity * Math.sin(angle/180*(Math.PI));
+				xVelocity = initialVelocity * Math.cos(angle/180*(Math.PI));
+				xAcceleration = (windAcceleration / 10);
+				yAcceleration = -(3.71 / 10);
+				x = 0;
+				y = 0;
+
+				let new_array = [{
+						"ground": ground,
+						"x": x,
+						"y": y,
+						"xVelocity": xVelocity,
+						"yVelocity": yVelocity,
+						"xAcceleration": xAcceleration,
+						"yAcceleration": yAcceleration
+					}];
+
+				while (y >= ground) {
+					
+					xVelocity = xVelocity + xAcceleration;
+					yVelocity = yVelocity  + yAcceleration;
+
+					x = x + (0.1 * xVelocity);
+					y = y + (0.1 * yVelocity);
+
+					if (x >= 13 && x <= 17) {
+						ground = 20;
+					} else {
+						ground = 0;
+					}
+
+					new_array.push({
+						"ground": ground,
+						"x": x,
+						"y": y,
+						"xVelocity": xVelocity,
+						"yVelocity": yVelocity,
+						"xAcceleration": xAcceleration,
+						"yAcceleration": yAcceleration
+					})
+				}
+				console.log(new_array);
+				return new_array;
+			};
+
+			plotTrajectory(trajectoryWithWind(13, 80, 1), "red");
+
+		</script>
+
+</body>
+</html>

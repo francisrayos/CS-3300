@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>CS 3300: Homework 2 - Francis Rayos del Sol</title>
+
+<script src="https://d3js.org/d3-array.v1.min.js"></script>
+<script src="https://d3js.org/d3-collection.v1.min.js"></script>
+<script src="https://d3js.org/d3-color.v1.min.js"></script>
+<script src="https://d3js.org/d3-format.v1.min.js"></script>
+<script src="https://d3js.org/d3-interpolate.v1.min.js"></script>
+<script src="https://d3js.org/d3-time.v1.min.js"></script>
+<script src="https://d3js.org/d3-time-format.v2.min.js"></script>
+<script src="https://d3js.org/d3-scale.v2.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.14.2/highlight.min.js"></script>
+<script src="https://d3js.org/d3.v5.min.js"></script>
+
+</head>
+<body>
+
+
+
+<h2>CS 3300: Assignment 3</h2>
+<h3>Francis Rayos del Sol - fmr32</h3>
+
+<p id="p1"><strong>Problem 1: Instead of a p element, for this question please create a ul element. For each of the following scales, create a li sub-element and answer the following questions</strong>
+</p>
+
+<ul>
+  <li>(a.) This scale is <strong>sequential</strong>. This is an effective scale because there is one really one hue of blue. Also, the higher values lead to brighter colors.</li>
+  <li>(b.) The yellow, blue, red scale depicted would <strong>not</strong> be an effective scale because there should only be two hues that would vary. Having the blue hue in the middle doesn't correlate with the positive/negative scale the task is meant to do.</li>
+  <li>(c.) The following color vision deficiences would be hard to interpret the color scale: Red-Weak/Protanomaly, Green-Weak/Deuteranomaly, Blue-Weak/Tritanomaly, Red-Blind/Protanopia, Green-Blind/Deuteranopia, Blue-Blind/Tritanopia, Monochromacy/Achromatopsia, Blue Cone Monochromacy.</li>
+  <li>(d.) I <strong>wouldn't recommend</strong> using this scale for their data analysis because the hue variation is very skewed. In the rainbow scale, colors like blue and green take up a large amount of the scale while colors like red, organge, and yellow are hardly represented on the scale.</li>
+</ul>
+
+<p id="p2"><strong>Problem 2: In HW2 you recreated Anscombes Quartet #2 from scratch in SVG. Now create the same plot again, but this time using d3 functions. First create x and y scale functions that map from data coordinates to SVG coordinates, using the same minimum and maximum values as the chart (10 pts). Create a variable containing the dataset (helpfully included in list form on the last page of the assignment). Add d3 axes, again using the x and y scale functions, with lines for every integer and labels for every 5 lines (hint: use the .tick() call on d3 axes) (5 pts). We know the default d3 axes will not look exactly like the image below. Using the dataset, add circles with positions provided by the scales. You don't need to use data() or enter() functions: it's fine if you just create circles one-by-one (5 pts). Finally add an event listener that changes the color of a circle to red when the circle is clicked (10 pts).</strong>
+</p>
+
+ <!-- <svg id="all" height="400" width="400" style="background: #F5F5F5">
+
+ </svg> -->
+
+<script>
+
+
+	// Dataset values
+	let coordinates = [[10, 9.14], [8, 8.14], [13, 8.74], [9, 8.77], [11, 9.26], [14, 8.1], [6, 6.13], [4, 3.1], [12, 9.13], [7, 7.26], [5, 4.74]];
+
+    
+    // Append SVG 
+    let svg = d3.select("body")
+        .append("svg")
+        .attr("width", 450)
+        .attr("height", 250)
+        // .selectAll("g")
+        // .data(coordinates)
+        // .enter()
+        // .append("circle")
+        .style("background-color", "F5F5F5");
+
+    // Create scale
+    let svg_xscale = d3.scaleLinear()
+        .domain([0, 15])
+        .range([10, 390]);
+
+    let svg_yscale = d3.scaleLinear()
+        .domain([0, 10])
+        .range([190, 0]);
+
+    // Add scales to axis
+    let x_axis = d3.axisBottom()
+    	//.tickValues([0, 5, 10, 15])
+    	.ticks(15)
+    	.tickSize(-190)
+        .scale(svg_xscale);
+
+    let y_axis = d3.axisLeft()
+    	//.tickValues([0, 5, 10])
+    	.ticks(10)
+    	.tickSize(-380)
+        .scale(svg_yscale);
+
+    //for loop
+
+    //Append group and insert axis
+    svg.append("g")
+    	.attr("transform","translate(30, 200)")
+		.call(x_axis);
+
+    svg.append("g")
+    	.attr("transform","translate(40, 10)")
+    	.call(y_axis);
+
+
+   	// Creates Circles
+   	coordinates.forEach(function(d, i) {
+    	svg.append("circle")
+   	 		.attr("cx", svg_xscale(d[0]))
+   	 		.attr("cy", svg_yscale(d[1]))
+   	 		.attr("r", 3)
+   	 		.style("fill", "green");
+   	});
+
+</script>
+
+<p id="p3"><strong>Problem 3: In this problem we are going to plot some data about diamond sales. The file diamonds.json contains a JSON block that defines an array of objects. Each object represents a particular diamond sold in a marketplace. These have been randomly sampled from a much larger dataset. In addition to numeric columns for price and size (carats), the dataset contains a color rating value where 1 is the best value and additional measures of quality.</strong>
+
+<script>
+
+	// Part A
+	var diamondData = [d3.json("diamonds.json").then(function(jsonData) {
+		console.log(jsonData);
+		//if (error) throw error;
+	})];
+
+	//var diamondData = [d3.json(diamonds.json)];
+
+	Promise.all(diamondData)
+		.then(function(diamondData) {
+			let svg = d3.select("body")
+        		.append("svg")
+        		.attr("width", 400)
+        		.attr("height", 400)
+        		.style("background-color", "F5F5F5");
+        	let carat = d3.scaleLinear()
+        		.domain([0, Math.max.apply(Math, diamondData.map(function(diamondData) { 
+        			return diamondData.carat
+        		}))])
+        		.range([10, 390]);
+    		let price = d3.scaleLinear()
+        		.domain([0, Math.max.apply(Math, diamondData.map(function(diamondData) { 
+        			return diamondData.price
+        		}))])
+        		.range([190, 0]);
+		});
+
+</script>	
+</p>
+

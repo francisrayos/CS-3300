@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+<title>CS 3300: Homework 5 - Francis Rayos del Sol</title>
+<script src="https://d3js.org/d3.v5.min.js"></script>
+<script src="https://d3js.org/topojson.v2.min.js"></script>
+
+<style>
+	.country {
+		fill: lightgrey;
+		stroke: none;
+	}
+
+	.outline {
+		fill: none;
+		stroke: black;
+		stroke-width: 1px;
+	}
+
+	.graticule {
+		fill: none;
+		stroke: lightgrey;
+	}
+
+	body {
+		font-family: Avenir;
+	}
+</style>
+
+</head>
+<body>
+
+<h2>CS 3300: Assignment 5</h2>
+<h3>Francis Rayos del Sol - fmr32</h3>
+
+	<p id="p1" style="font-style: italic;">Problem 1:  There are many different ways to project Earths sphere into 2-dimensional space. Each one provides benefits and imposes costs for map-makers. In this problem you will construct 3 different projections and identify their trade-offs.<strong> Please Note: I added background colors to the maps simply for more fun, whimsical, visual purposes.</strong></p>
+
+	<!-- Part C SVG -->
+	<svg id="mercator" height="400" width="600" style="background: beige"></svg>
+
+	<p id="p1response">An advantage of the Mercator projection is that it accurately depicts the countries' sizes and shapes without too much distortion. A draw-back is that it creates disporportionate scales of certain areas, especially when you move further away from the center. A potential use of this projection is in navigating oceanic travel because it would be easy to draw a straight line from one destination to another and calculate the distance without doing complex math.</p>
+
+	<!-- Part E SVG -->
+	<svg id="equalEarth" height="400" width="600" style="background: honeydew"></svg>
+
+	<p id="p2response">An advantage of the Equal Earth projection is that is provides a good way of showing countries' and continents' relative sizes to each other. A draw-back is that the areas and angles in certain areas, especially near the poles, are being compromised. A potential use of this projection is for classroom learning demonstrations to understand what the entire world looks like at once.</p>
+
+	<!-- Part F SVG -->
+	<svg id="conicEqualArea" height="400" width="600" style="background: lavender"></svg>
+
+	<p id="p3response">An advantage of the Conic Equal Area projection is that all of the areas shown are accurately proportional to their sizes on the Earth. A draw back is that the shapes of certain countries aren't that geometrically accurate due to their scaling. A potential use of this projection is for visualizing weather maps that span across the entire world.</p>
+
+	<p id="p2" style="font-style: italic;">Problem 2: In this problem we will make a choropleth map of NY 2016 presidential election results. We have provided a topoJSON data file that contains the shapes of electoral districts in NY and integrated data on votes for the two leading candidates into the dataset.</p>
+
+	<svg id="nyc_districts" height="700" width="800" style="background: whitesmoke"></svg>
+
+		<script>
+			let part1_width = 600;
+			let part1_height = 400;
+
+			let part2_width = 800;
+			let part2_height = 700;
+
+			let paddingLeft = 30;
+			let paddingRight = 30;
+			let paddingTop = 30;
+			let paddingBottom = 30;
+
+			let plotWidth1 = part1_width - paddingLeft - paddingRight;
+			let plotHeight1 = part1_height - paddingTop - paddingBottom;
+
+			let plotWidth2 = part2_width - paddingLeft - paddingRight;
+			let plotHeight2 = part2_height - paddingTop - paddingBottom;
+
+			const LoadData = async () => {
+				// QUESTION 1
+
+				// Part A
+  				let world = await d3.json("world_110m.json");
+
+  				let countries = topojson.feature(world, world.objects.countries);
+  				let countriesMesh = topojson.mesh(world, world.objects.countries);
+
+  				// Part C
+  				let svg_mercator = d3.selectAll("#mercator").append("g")
+					.attr("transform", "translate("+ paddingLeft + "," + paddingTop +")");
+
+  				let mercatorProjection = d3.geoMercator().fitSize([plotWidth1, plotHeight1], countries);
+  				let pathGenerator1 = d3.geoPath().projection(mercatorProjection);
+
+  				svg_mercator.append("path")
+  					.attr("class", "graticule")
+  					.attr("d", pathGenerator1(d3.geoGraticule10()));
+
+  				svg_mercator.selectAll("path")
+  					.data(countries.features)
+  					.enter()
+  					.append("path")
+  					.attr("class", "country")
+  					.attr("d", pathGenerator1);
+
+  				svg_mercator.append("path")
+      				.datum(countriesMesh)
+      				.attr("class", "outline")
+      				.attr("d", pathGenerator1);
+
+      			// Part E
+      			let svg_equalEarth = d3.selectAll("#equalEarth").append("g")
+					.attr("transform", "translate("+ paddingLeft + "," + paddingTop +")");
+
+      			let equalProjection = d3.geoEqualEarth().fitSize([plotWidth1, plotHeight1], countries);
+  				let pathGenerator2 = d3.geoPath().projection(equalProjection);
+
+  				svg_equalEarth.append("path")
+  					.attr("class", "graticule")
+  					.attr("d", pathGenerator2(d3.geoGraticule10()));
+
+  				svg_equalEarth.selectAll("path")
+  					.data(countries.features)
+  					.enter()
+  					.append("path")
+  					.attr("class", "country")
+  					.attr("d", pathGenerator2);
+
+  				svg_equalEarth.append("path")
+      				.datum(countriesMesh)
+      				.attr("class", "outline")
+      				.attr("d", pathGenerator2);
+
+      			// Part F
+      			let svg_conic = d3.selectAll("#conicEqualArea").append("g")
+					.attr("transform", "translate("+ paddingLeft + "," + paddingTop +")");
+
+      			let conicProjection = d3.geoConicEqualArea().fitSize([plotWidth1, plotHeight1], countries);
+  				let pathGenerator3 = d3.geoPath().projection(conicProjection);
+
+  				svg_conic.append("path")
+  					.attr("class", "graticule")
+  					.attr("d", pathGenerator3(d3.geoGraticule10()));
+
+  				svg_conic.selectAll("path")
+  					.data(countries.features)
+  					.enter()
+  					.append("path")
+  					.attr("class", "country")
+  					.attr("d", pathGenerator3);
+
+  				svg_conic.append("path")
+      				.datum(countriesMesh)
+      				.attr("class", "outline")
+      				.attr("d", pathGenerator3);
+
+  				// Testing Console - Question 1
+				console.log(world);
+				console.log(countries);
+
+				// QUESTION 2
+
+				// Part A
+				let nyd = await d3.json("new_york_districts.json");
+
+				let svg_nyc = d3.selectAll("#nyc_districts").append("g")
+					.attr("transform", "translate("+ paddingLeft + "," + paddingTop +")");
+
+				let districts = topojson.feature(nyd, nyd.objects.districts);
+
+				let nycProjection = d3.geoMercator().fitSize([plotWidth2, plotHeight2], districts);
+  				let pathGenerator4 = d3.geoPath().projection(nycProjection);
+
+  				// Part B
+  				let color_scale = d3.scaleLinear()
+  					.domain([30, 50, 70])
+  					.range(["firebrick", "gainsboro", "dodgerblue"])
+  					.interpolate(d3.interpolateHcl)
+  					.clamp(true);
+
+  				// Parts C & D
+  				svg_nyc.selectAll("path")
+  					.data(districts.features)
+  					.enter()
+  					.append("path")
+  					.attr("class", "district")
+  					.style("stroke", "white")
+  					.style("stroke-width", 1)
+  					.style("fill", d => color_scale(d.properties.percent_clinton))
+  					.attr("d", pathGenerator4);
+
+  				// Part E
+  				let latlong_array = nycProjection([-76.5, 42.443333]);
+
+  				svg_nyc.append("circle")
+  					.attr("r", 10)
+  					.attr("cx", latlong_array[0])
+  					.attr("cy", latlong_array[1])
+  					.style("fill", "white");
+
+				// Testing Console - Question 2
+				console.log(nyd);
+				console.log(districts);
+				console.log(latlong_array[0]);
+				console.log(latlong_array[1]);
+
+  			};
+
+			LoadData();
+
+		</script>
+
+</body>
+</html>

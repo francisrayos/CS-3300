@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+<title>CS 3300: Homework 6 - Francis Rayos del Sol</title>
+<script src="https://d3js.org/d3.v5.min.js"></script>
+
+<style>
+	body {
+		font-family: Avenir;
+	}
+</style>
+
+</head>
+<body>
+
+<h2>CS 3300: Assignment 6</h2>
+<h3>Francis Rayos del Sol - fmr32</h3>
+
+	<p id="p1" style="font-style: italic;">Problem 1:  For this problem, we will be making use of a color space available in d3, HSL. Unlike traditional HSV (hue, saturation, value), HSL (hue, saturation, lightness) acts more like a perceptual scale that accurately accounts for how individuals perceive color luminosity. You will design an interactive tool for exploring different colors.</strong></p>
+
+	<p id="p1a"> <svg id="HSL" height="500" width="500" style="background: #F5F5F5"></svg></p>
+
+	<script>
+		let svg = d3.select("#HSL");
+		let width = svg.attr("width");
+		let height = svg.attr("height");
+
+		let paddingLeft = 50;
+		let paddingRight = 50;
+		let paddingTop = 50;
+		let paddingBottom = 50;
+
+		let plotWidth = width - paddingLeft - paddingRight;
+		let plotHeight = height - paddingTop - paddingBottom;
+
+		// PART 1A
+		let hsl_array = [];
+		for (s = 0; s <= 100; s = s + 10) {
+			for (l = 0; l <= 100; l = l + 10) {
+				hsl_array.push({
+					saturation: s,
+					lightness: l
+				})
+			}
+		}
+
+		let scaleLight = d3.scaleLinear()
+        	.domain([0,100])
+        	.range([0, plotWidth]);
+
+      	let scaleSat = d3.scaleLinear()
+        	.domain([0,100])
+        	.range([plotHeight, 0]);
+
+      	let scaleHSL = d3.scaleLinear()
+        	.domain([0,100])
+			.range([0, 1]);
+			
+		// PART 1B
+		function showCircles(hue) {
+			let circles = svg.selectAll("circle")
+				.data(hsl_array);
+
+			circles.enter()
+				.append("circle")
+				.attr("r", 20)
+				.style("stroke", "grey")
+				.style("stroke-width", 1)
+				.attr("transform", "translate(" + paddingLeft + "," + paddingTop + ")")
+				.merge(circles)
+				.attr("cx", d => {return scaleLight(d.lightness)})
+				.attr("cy", d => {return scaleSat(d.saturation)})
+				.style("fill", d => d3.hsl(hue, scaleHSL(d.saturation), scaleHSL(d.lightness)));
+		}
+
+		// PART 1C
+		function startColor () {
+			let starting_hue = 180;
+			showCircles(180);
+		}
+
+		let begin = startColor();
+		let new_hue = 180;
+		let newSlider = d3.select("#p1a").append("div");
+
+		newSlider.append("div").text("Color Picker Tool")
+			.append("div")
+			.append("input")
+			.attr("type", "range")
+			.attr("class", "slider")
+			.attr("id","slider")
+			.attr("min", 0)
+			.attr("max", 360)
+			.attr("step", 1)
+			.attr("value", new_hue)
+			.on("input", function () {
+				// Updates new hue value and updates circles
+				new_hue = Number(this.value);
+				showCircles(new_hue);
+			});
+
+	</script>
+
+
+	<!--- Copy this segment of code into your homework --->
+
+	<p style="font-style: italic;">Problem 2: The goal of this problem is to create an interactive tool that allows you to find the average color of a region of an image (in this case the painting, Nighthawks, by Hopper). The template includes a helper function that gives you a 2-d array of the RGB values for the pixels in the image. The script will automatically load the image and then run the imgLoaded function.</p>
+
+	<svg id="container" width="800" height="437">
+		<foreignObject width="800" height="437" y="0" x="0">
+		<!--- Foreign object allows us to nest HTML inside an SVG --->
+		<!--- It can get pretty hacky, so use at your own risk --->
+		<canvas id="painting" width="800" height="437"></canvas>
+		</foreignObject>
+		<g id="brush"></g>
+	</svg>
+	<br/>
+	<svg width="800" height="100">
+	<rect id="color" x="0" y="0" width="800" height="100" fill="white" />
+	<text id="label" x="20" y="80" />
+	</svg>
+
+	<script>
+
+	// Some helper variables for you to use -- do not modify or helper functions will fail
+	var canvas = d3.select("#painting");
+	var gfxContext = canvas.node().getContext("2d");
+	var imgWidth = canvas.node().width;
+	var imgHeight = canvas.node().height;
+
+	var img = new Image;
+	img.src = "nighthawks.png"
+	img.onload = imgLoaded;
+
+	function imgLoaded() {
+	gfxContext.drawImage(this, 0, 0); // Paint image to canvas
+
+	// pixels is a 2-d array containing RGB data for the whole image
+	//  for example:  pixels[155][22] will tell give you a dict for the RGB values at point x=22, y=155
+	//              (note that y position comes first, then x position)
+	//              R, G, and B values start at 0 and run to 255
+	let pixels = getAllPixels();
+
+	// ----- All of your code for this problem must go between these comments -----
+	// Make use of the g#brush group inside of the SVG element for placing your brush
+	// Make use of the #color and #label elements for your average color and text label
+
+	// PART 2A
+	let painting_svg = d3.selectAll("#container");
+
+	let new_brush = d3.brush()
+		.extent([[0,0], [imgWidth, imgHeight]])
+		.on("brush end", brushed);
+
+	painting_svg.select("#brush").append("g")
+		.attr("class", "brush")
+		.call(new_brush);
+
+	// PART 2B & 2C
+	function brushed() {
+		if (d3.event.selection == null) {
+			let no_fill = d3.selectAll("#color").attr("fill", "#F5F5F5");
+			let no_text = d3.selectAll("#label").text("Please click and drag a region of the painting.").attr("fill", "black");
+			console.log("Please click and drag a region of the painting.")
+			return;
+		}
+		else {
+			var start_x, start_y, end_x, end_y;
+			
+			start_x = d3.event.selection[0][0];
+			start_y = Math.floor(d3.event.selection[0][1]);
+			end_x = d3.event.selection[1][0];
+			end_y = Math.floor(d3.event.selection[1][1]);
+
+			let countL = 0, countA = 0, countB = 0;
+			const totalPixel = (end_y - start_y) * (end_x - start_x); // total pixels equals area of box
+
+			for (var y = start_y; y <= end_y; y = y + 1) {
+				for (var x = start_x; x <= end_x; x = x + 1) {
+					current_pixel = pixels[y][x];
+
+					// let scaleRtoL = d3.scaleLinear()
+					// 	.domain([0, 255])
+					// 	.range([0, 155]);
+
+					// let scaleGtoA = d3.scaleLinear()
+					// 	.domain([0, 255])
+					// 	.range([-100, 100]);
+
+					// let scaleBtoB = d3.scaleLinear()
+					// 	.domain([0, 255])
+					// 	.range([-100, 100]);
+
+					let rgb_to_lab = d3.lab(d3.rgb(current_pixel.r, current_pixel.g, current_pixel.b));
+					//let conversion = d3.lab(scaleRtoL(current_pixel.r), scaleGtoA(current_pixel.g), scaleBtoB(current_pixel.b));
+
+					countL += rgb_to_lab.l;
+					countA += rgb_to_lab.a;
+					countB += rgb_to_lab.b;
+				}
+			}
+			let percent_l = countL / totalPixel;
+			let percent_a = countA / totalPixel;
+			let percent_b = countB / totalPixel;
+
+			let averageColor = d3.lab(percent_l, percent_a, percent_b);
+			let box = d3.select("#color").attr("fill", averageColor);
+
+			let color_hex = d3.selectAll("#label")
+				.text(averageColor.hex())
+				.attr("fill", changeTextColor());
+
+			function changeTextColor () {
+				if (averageColor.l < 50) {
+					return "white";
+				}
+				else {
+					return "black";
+				}
+			}
+		}
+	}
+
+	// ----- All of your code for this problem must go between these comments -----
+
+	}
+
+	function getAllPixels() {
+
+	let gfxData = gfxContext.getImageData(0,0,imgWidth,imgHeight).data;
+	let processedData = [];
+	for (let i=0; i<gfxData.length; i=i+4) { // contains stripe of RGBARGBARGBA
+		let xCoord = Math.floor(i/4) % imgWidth;
+		let yCoord = Math.floor(i/(imgWidth*4))
+		if (xCoord === 0) { processedData.push( [] ); }
+		processedData[processedData.length-1].push( {
+		x: xCoord,
+		y: yCoord,
+		r: gfxData[i],
+		g: gfxData[i+1],
+		b: gfxData[i+2]
+		} );
+	}
+	return processedData;
+	}
+
+	</script>
+
+	<!--- End segment of code for your homework --->
+
+</body>
+</html>

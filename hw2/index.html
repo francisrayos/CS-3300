@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>CS 3300: Homework 2 - Francis Rayos del Sol</title>
+</head>
+<body>
+
+<h2>CS 3300: Assignment 2</h2>
+<h3>Francis Rayos del Sol - fmr32</h3>
+
+<p id="p1"><strong>Problem 1: Create a 200x200 pixel SVG element with the word "INFO3300" in your choice of blue color, centered in the exact middle (vertically and horizontally), using the Palatino typeface, with a drop shadow for the word. Consult the SVG specification (linked off of the Prompt file on SVG day) to find out how to change color and font attributes, set text alignment, and add filters and shadows. Put a small pink circle at (100,100) so we can verify that your text is centered. If you do not have Palatino, you may use another font to test your code, but set it as Palatino in the final version for grading.</strong>
+</p>
+
+<p>
+<svg height=200 width=200 style="border: 1px solid teal" viewbox="0 0 200 200">
+
+	<filter id="drop-shadow" x="-20%" y="-20%" width="140%" height="140%">
+		<feGaussianBlur stdDeviation="1" result="shadow"/>
+		<feOffset dx="4" dy="4"/>
+	</filter>
+
+    <circle cx="100" cy="100" r="4" fill="pink"/>
+    <text x="100" y="100" style="font-family:'Palatino'; font:15px Palatino; fill:#577399;text-anchor: middle; dominant-baseline: middle;">INFO3300</text>
+    <text x="100" y="100" style="font-family:'Palatino'; font:15px Palatino; fill:#577399;text-anchor: middle; dominant-baseline: middle; filter: url(#drop-shadow);">INFO3300</text>
+
+</svg>
+</p>
+
+<p id="p2"><strong>Problem 2: Create a 300x200 pixel SVG element. Reproduce this plot of Anscombe Quartet #2 using SVG elements:</strong>
+</p>
+
+<p>
+<svg height=200 width=300 style="border: 1px solid teal" viewbox="0 0 300 200">
+
+	<!-- Outer Grid Lines -->
+	<line x1="15" y1="10" x2="285" y2="10" style="stroke: gray; stroke-width: 1;" />
+	<line x1="15" y1="10" x2="15" y2="190" style="stroke: gray; stroke-width: 1;" />
+	<line x1="285" y1="10" x2="285" y2="190" style="stroke: gray; stroke-width: 1;" />
+	<line x1="15" y1="190" x2="285" y2="190" style="stroke: gray; stroke-width: 1;" />
+
+	<!-- Horizontal Grid Lines -->
+	<line x1="15" y1="28" x2="285" y2="28" style="stroke: gray; stroke-width: 1;" />
+	<line x1="15" y1="46" x2="285" y2="46" style="stroke: gray; stroke-width: 1;" />
+	<line x1="15" y1="64" x2="285" y2="64" style="stroke: gray; stroke-width: 1;" />
+	<line x1="15" y1="82" x2="285" y2="82" style="stroke: gray; stroke-width: 1;" />
+	<line x1="15" y1="100" x2="285" y2="100" style="stroke: gray; stroke-width: 1;" />
+	<line x1="15" y1="118" x2="285" y2="118" style="stroke: gray; stroke-width: 1;" />
+	<line x1="15" y1="136" x2="285" y2="136" style="stroke: gray; stroke-width: 1;" />
+	<line x1="15" y1="154" x2="285" y2="154" style="stroke: gray; stroke-width: 1;" />
+	<line x1="15" y1="172" x2="285" y2="172" style="stroke: gray; stroke-width: 1;" />
+
+	<!-- Vertical Grid Lines -->
+	<line x1="33" y1="10" x2="33" y2="190" style="stroke: gray; stroke-width: 1;" />
+	<line x1="51" y1="10" x2="51" y2="190" style="stroke: gray; stroke-width: 1;" />
+	<line x1="69" y1="10" x2="69" y2="190" style="stroke: gray; stroke-width: 1;" />
+	<line x1="87" y1="10" x2="87" y2="190" style="stroke: gray; stroke-width: 1;" />
+	<line x1="105" y1="10" x2="105" y2="190" style="stroke: gray; stroke-width: 1;" />
+	<line x1="123" y1="10" x2="123" y2="190" style="stroke: gray; stroke-width: 1;" />
+	<line x1="141" y1="10" x2="141" y2="190" style="stroke: gray; stroke-width: 1;" />
+	<line x1="159" y1="10" x2="159" y2="190" style="stroke: gray; stroke-width: 1;" />
+	<line x1="177" y1="10" x2="177" y2="190" style="stroke: gray; stroke-width: 1;" />
+	<line x1="195" y1="10" x2="195" y2="190" style="stroke: gray; stroke-width: 1;" />
+	<line x1="213" y1="10" x2="213" y2="190" style="stroke: gray; stroke-width: 1;" />
+	<line x1="231" y1="10" x2="231" y2="190" style="stroke: gray; stroke-width: 1;" />
+	<line x1="249" y1="10" x2="249" y2="190" style="stroke: gray; stroke-width: 1;" />
+	<line x1="267" y1="10" x2="267" y2="190" style="stroke: gray; stroke-width: 1;" />
+
+	<!-- Vertical Axis Labels -->
+	<text x="7.5" y="10" style="font-family:'Palatino'; font:6px Palatino; fill:#577399; text-anchor: middle; dominant-baseline: middle;">10</text>
+	<text x="7.5" y="100" style="font-family:'Palatino'; font:6px Palatino; fill:#577399; text-anchor: middle; dominant-baseline: middle;">5</text>
+	<text x="7.5" y="190" style="font-family:'Palatino'; font:6px Palatino; fill:#577399; text-anchor: middle; dominant-baseline: middle;">0</text>
+
+	<!-- Horizontal Axis Labels -->
+	<text x="285" y="195" style="font-family:'Palatino'; font:6px Palatino; fill:#577399; text-anchor: middle; dominant-baseline: middle;">15</text>
+	<text x="195" y="195" style="font-family:'Palatino'; font:6px Palatino; fill:#577399; text-anchor: middle; dominant-baseline: middle;">10</text>
+	<text x="105" y="195" style="font-family:'Palatino'; font:6px Palatino; fill:#577399; text-anchor: middle; dominant-baseline: middle;">5</text>
+	<text x="15" y="195" style="font-family:'Palatino'; font:6px Palatino; fill:#577399; text-anchor: middle; dominant-baseline: middle;">0</text>
+
+	<!-- Plot Points (Increasing Order)-->
+	<circle cx="87" cy="134.2" r="3" fill="purple"/>
+	<circle cx="105" cy="104.68" r="3" fill="purple"/>
+	<circle cx="123" cy="79.66" r="3" fill="purple"/>
+	<circle cx="141" cy="59.32" r="3" fill="purple"/>
+	<circle cx="159" cy="43.48" r="3" fill="purple"/>
+	<circle cx="177" cy="32.14" r="3" fill="purple"/>
+	<circle cx="195" cy="25.48" r="3" fill="purple"/>
+	<circle cx="213" cy="23.32" r="3" fill="purple"/>
+	<circle cx="231" cy="25.66" r="3" fill="purple"/>
+	<circle cx="249" cy="32.68" r="3" fill="purple"/>
+	<circle cx="267" cy="44.2" r="3" fill="purple"/>
+	
+</svg>
+</p>
+
+<p id="p3"><strong>Problem 3: Use line and rect elements to create your own version of a Piet Mondrian painting in a 200x200 SVG canvas. Piet Mondrian was an early 20th century artist who, as a member of the De Stijl movement, reduced his art to three primary colors and black lines in a series of famous neoplasticist works. Here are some examples: one, two, three, four. In your own neoplastic work, you must include at least 6 lines and 3 rectangles. line elements must use a black stroke and rect elements must be either red, yellow, or blue. For this homework rectangles must be completely enclosed by lines or the edges of the canvas (though in Mondrian’s work this was not always the case). You may use any additional features you feel would add aesthetic value. If you use a tool to generate coordinates for shapes, please cite that tool. There will be a small creativity component in grading, but faithfulness to art history will not be evaluated. </strong>
+
+<p>
+<svg height=200 width=200 style="border: 1px solid teal" viewbox="0 0 200 200">
+
+	<rect x=150 y=0 height=160 width=20 style="fill:blue;" />
+	<rect x=0 y=50 height=110 width=40 style="fill:red;" />
+	<rect x=40 y=160 height=20 width=110 style="fill:yellow;" />
+	<rect x=170 y=180 height=20 width=30 style="fill:red;" />
+
+	<line x1="0" y1="50" x2="150" y2="50" style="stroke: black; stroke-width: 4;" />
+	<line x1="150" y1="0" x2="150" y2="200" style="stroke: black; stroke-width: 4" />
+	<line x1="40" y1="0" x2="40" y2="200" style="stroke: black; stroke-width: 4" />
+	<line x1="0" y1="180" x2="200" y2="180" style="stroke: black; stroke-width: 4" />
+	<line x1="0" y1="160" x2="170" y2="160" style="stroke: black; stroke-width: 4" />
+	<line x1="170" y1="0" x2="170" y2="200" style="stroke: black; stroke-width: 4" />
+
+</svg>
+</p>
+
+</p>
+
+<p id="p4"><strong>Problem 4: Make a bar plot that represents the frequency of numbers in this dataset (a histogram): let samples = [5, 1, 7, 3, 15, 10, 0, 10, 8, 5, 5, 2, 14, 6, 7, 6];
+In your histogram, the x-axis will correspond to values from the dataset, and the y-axis will correspond to the frequency of those values. Figure out how to map those numbers into pixel coordinates. </strong>
+
+<p>
+<svg height=200 width=300 style="border: 1px solid teal" viewbox="0 0 300 200">
+
+	<!-- X & Y Axis Lines -->
+	<line x1="45" y1="10" x2="45" y2="170" style="stroke: black; stroke-width: 1;" />
+	<line x1="45" y1="170" x2="253" y2="170" style="stroke: black; stroke-width: 1;" />
+
+	<!-- Vertical Axis Labels -->
+	<text x="30" y="10" style="font-family:'Palatino'; font:6px Palatino; fill:#577399; text-anchor: middle; dominant-baseline: middle;">4</text>
+	<text x="30" y="50" style="font-family:'Palatino'; font:6px Palatino; fill:#577399; text-anchor: middle; dominant-baseline: middle;">3</text>
+	<text x="30" y="90" style="font-family:'Palatino'; font:6px Palatino; fill:#577399; text-anchor: middle; dominant-baseline: middle;">2</text>
+	<text x="30" y="130" style="font-family:'Palatino'; font:6px Palatino; fill:#577399; text-anchor: middle; dominant-baseline: middle;">1</text>
+
+	<!-- Horizontal Axis Labels -->
+	<text x="246.5" y="185" style="font-family:'Palatino'; font:6px Palatino; fill:#577399; text-anchor: middle; dominant-baseline: middle;">15</text>
+	<text x="233.5" y="185" style="font-family:'Palatino'; font:6px Palatino; fill:#577399; text-anchor: middle; dominant-baseline: middle;">14</text>
+	<text x="220.5" y="185" style="font-family:'Palatino'; font:6px Palatino; fill:#577399; text-anchor: middle; dominant-baseline: middle;">13</text>
+	<text x="207.5" y="185" style="font-family:'Palatino'; font:6px Palatino; fill:#577399; text-anchor: middle; dominant-baseline: middle;">12</text>
+	<text x="194.5" y="185" style="font-family:'Palatino'; font:6px Palatino; fill:#577399; text-anchor: middle; dominant-baseline: middle;">11</text>
+	<text x="181.5" y="185" style="font-family:'Palatino'; font:6px Palatino; fill:#577399; text-anchor: middle; dominant-baseline: middle;">10</text>
+	<text x="168.5" y="185" style="font-family:'Palatino'; font:6px Palatino; fill:#577399; text-anchor: middle; dominant-baseline: middle;">9</text>
+	<text x="155.5" y="185" style="font-family:'Palatino'; font:6px Palatino; fill:#577399; text-anchor: middle; dominant-baseline: middle;">8</text>
+	<text x="142.5" y="185" style="font-family:'Palatino'; font:6px Palatino; fill:#577399; text-anchor: middle; dominant-baseline: middle;">7</text>
+	<text x="129.5" y="185" style="font-family:'Palatino'; font:6px Palatino; fill:#577399; text-anchor: middle; dominant-baseline: middle;">6</text>
+	<text x="116.5" y="185" style="font-family:'Palatino'; font:6px Palatino; fill:#577399; text-anchor: middle; dominant-baseline: middle;">5</text>
+	<text x="103.5" y="185" style="font-family:'Palatino'; font:6px Palatino; fill:#577399; text-anchor: middle; dominant-baseline: middle;">4</text>
+	<text x="90.5" y="185" style="font-family:'Palatino'; font:6px Palatino; fill:#577399; text-anchor: middle; dominant-baseline: middle;">3</text>
+	<text x="77.5" y="185" style="font-family:'Palatino'; font:6px Palatino; fill:#577399; text-anchor: middle; dominant-baseline: middle;">2</text>
+	<text x="64.5" y="185" style="font-family:'Palatino'; font:6px Palatino; fill:#577399; text-anchor: middle; dominant-baseline: middle;">1</text>
+	<text x="51.5" y="185" style="font-family:'Palatino'; font:6px Palatino; fill:#577399; text-anchor: middle; dominant-baseline: middle;">0</text>
+
+	<!-- Rectangles -->
+	<rect x=45 y=130 height=40 width=13 style="fill:lightblue; stroke:lightsalmon; stroke-width:0.5" />
+	<rect x=58 y=130 height=40 width=13 style="fill:lightblue; stroke:lightsalmon; stroke-width:0.5" />
+	<rect x=71 y=130 height=40 width=13 style="fill:lightblue; stroke:lightsalmon; stroke-width:0.5" />
+	<rect x=84 y=130 height=40 width=13 style="fill:lightblue; stroke:lightsalmon; stroke-width:0.5" />
+	<rect x=110 y=50 height=120 width=13 style="fill:lightblue; stroke:lightsalmon; stroke-width:0.5" />
+	<rect x=123 y=90 height=80 width=13 style="fill:lightblue; stroke:lightsalmon; stroke-width:0.5" />
+	<rect x=136 y=90 height=80 width=13 style="fill:lightblue; stroke:lightsalmon; stroke-width:0.5" />
+	<rect x=149 y=130 height=40 width=13 style="fill:lightblue; stroke:lightsalmon; stroke-width:0.5" />
+	<rect x=175 y=90 height=80 width=13 style="fill:lightblue; stroke:lightsalmon; stroke-width:0.5" />
+	<rect x=227 y=130 height=40 width=13 style="fill:lightblue; stroke:lightsalmon; stroke-width:0.5" />
+	<rect x=240 y=130 height=40 width=13 style="fill:lightblue; stroke:lightsalmon; stroke-width:0.5" />
+
+	<!-- Mean, Median, & Mode Lines -->
+	<line x1="136" y1="10" x2="136" y2="170" style="stroke: red; stroke-width: 2;" />
+	<line x1="129.5" y1="10" x2="129.5" y2="170" style="stroke: blue; stroke-width: 2;" />
+	<line x1="116.5" y1="10" x2="116.5" y2="170" style="stroke: purple; stroke-width: 2;" />
+
+	<!-- Standard Deviation Rectangle -->
+	<rect x=82.7962 y=10 height=160 width=106.4076 style="fill:plum; opacity: 0.2" />
+
+</svg>
+
+<p>The mean of these values is 6.5. The mode of the data set is 5, which appears 3 times. The median of the values is 6. Finally, the standard deviation is 4.0926.</p>
+
+</p>
+
+</p>

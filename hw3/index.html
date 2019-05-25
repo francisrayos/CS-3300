@@ -1,0 +1,341 @@
+<html><head>
+<title> CS 3300 HW 3 </title>
+
+	<script src="https://d3js.org/d3.v5.min.js"></script>
+
+</head>
+
+<body>
+
+	<h2> Shalin Mehta (sjm382) </h2>
+
+	<p id="p1"> <b> PROBLEM 1 </b> </p>
+
+	<ul>
+		<li> 
+			<b> Part A </b> <br>
+			This scale is sequential. It is an effective color scale because it is fairly easy to distinguish <br>
+			the varying shades of color due to the gradual change in luminosity and saturation of the hue. 
+		</li>
+
+		<br>
+
+		<li> 
+			<b> Part B </b> <br>
+			This is not an effective color scale because the blue hue seeps onto both the left and <br>
+			right sides, which weakens the divergent scale as there really is no "sequential on both sides". <br>
+			It would be much better if the middle was clearly discernible, so that the positive and negative <br>
+			values would each be represented by only one hue.
+		</li>
+
+		<br>
+
+		<li> 
+			<b> Part C </b> <br>
+			The color vision deficiences that would render this color scale as hard to interpret are <br>
+			<b> Red-Weak/Protanomaly, Green-Weak/Deuteranomaly, Red-Blind/Protanopia, Green-Blind/Deuteranopia, <br>
+			Monochromacy/Achromatopsia, and Blue Cone Monochromacy. </b> The site I used to determine this can be <br>
+			found here: https://www.color-blindness.com/coblis-color-blindness-simulator/
+		</li>
+
+		<br>	
+
+		<li> 
+			<b> Part D </b> <br>
+			I would not recommend this rainbow color scale because colors don't really have an "order" and <br>
+			they may have implicit categorizations, which would make it more challenging to recognize which <br>
+			colors represent which income levels without having to repeatedly look at the key.
+		</li>
+	</ul>
+
+	<p id="p2"> <b> PROBLEM 2 </b> <br><br>
+		<svg id="anscombegraph" height=200 width=300>
+		</svg>
+
+		<script> 
+			let svg = d3.select("svg#anscombegraph");
+			let width = svg.attr("width");
+			let height = svg.attr("height");
+
+			let marginLeft = 15;
+			let marginRight = 15;
+			let marginTop = 5;
+			let marginBottom = 15;
+
+			let chartWidth = width - marginLeft - marginRight;
+			let chartHeight = height - marginTop - marginBottom;
+
+			let xScale = d3.scaleLinear()
+				.domain([0, 15])
+				.range([0, chartWidth]);
+
+			let yScale = d3.scaleLinear()
+				.domain([0, 10])
+				.range([chartHeight, 0]);
+
+			let xAxis = d3.axisBottom(xScale).ticks(3).tickSize(0);
+			let yAxis = d3.axisLeft(yScale).ticks(2).tickSize(0);
+
+			svg.append("g")
+				.attr("class", "x axis")
+				.attr("transform","translate(" + marginLeft + "," + (chartHeight + marginTop) + ")")
+				.call(xAxis);
+
+		    svg.append("g")
+		    	.attr("class", "y axis")
+		    	.attr("transform","translate(" + marginLeft + ", " + marginTop + ")")
+		    	.call(yAxis);
+
+		    for (let x = 1; x <= 15; x++) {
+		    	svg.append("line")
+		    		.attr("x1", xScale(x))
+		    		.attr("y1", 0)
+		    		.attr("x2", xScale(x))
+		    		.attr("y2", chartHeight)
+		    		.attr("transform", "translate(" + marginLeft + ", " + marginTop + ")")
+		    		.style("stroke-width", 1)
+		    		.style("stroke", "#ccc");
+		    }
+
+		    for (let y = 1; y <= 10; y++) {
+		    	svg.append("line")
+		    		.attr("x1", 0)
+		    		.attr("y1", yScale(y))
+		    		.attr("x2", chartWidth)
+		    		.attr("y2", yScale(y))
+		    		.attr("transform", "translate(" + marginLeft + ", " + marginTop + ")")
+		    		.style("stroke-width", 1)
+		    		.style("stroke", "#ccc");
+		    }
+
+			let points = [[10, 9.14], [8, 8.14], [13, 8.74], [9, 8.77], [11, 9.26], 
+						[14, 8.1], [6, 6.13], [4, 3.1], [12, 9.13], [7, 7.26], [5, 4.74]];
+
+			points.forEach(function(point) {
+				svg.append("circle")
+					.attr("r", 3)
+					.attr("cx", xScale(point[0]))
+					.attr("cy", yScale(point[1]))
+					.attr("transform", "translate(" + marginLeft + ", " + marginTop + ")")
+					.style("fill", "steelblue")
+					.on("click", function() {
+						let circle = d3.select(this);
+						circle.style("fill", "red");
+					});
+			});
+		</script>
+	</p>
+
+	<p id="p3"> <b> PROBLEM 3 </b> <br><br>
+
+		<script>
+			var diamondData;
+
+			d3.json("diamonds.json").then(function(data) {
+				diamondData = data;
+
+				// price vs. carat svg
+				let svg1 = d3.select("body")
+					.append("svg")
+					.attr("id", "diamonds1")
+					.attr("width", 400)
+					.attr("height", 400)
+
+				let width = svg1.attr("width");
+				let height = svg1.attr("height");
+
+				let marginLeft = 0;
+				let marginRight = 5;
+				let marginTop = 5;
+				let marginBottom = 0;
+
+				let chartWidth = width - marginRight - marginLeft;
+				let chartHeight = height - marginTop - marginBottom;
+
+				let maxCarat = d3.max(diamondData, d => d["carat"]);
+				let maxPrice = d3.max(diamondData, d => d["price"]);
+
+				// x scale
+				let caratScale = d3.scaleLinear()
+					.domain([0, maxCarat])
+					.range([0, chartWidth]);
+
+				// y scale
+				let priceScale = d3.scaleLinear()
+					.domain([0, maxPrice])
+					.range([chartHeight, 0]);
+
+				for (let x = 0; x <= maxCarat; x++) {
+					svg1.append("line")
+			    		.attr("x1", caratScale(x))
+			    		.attr("y1", 0)
+			    		.attr("x2", caratScale(x))
+			    		.attr("y2", chartHeight)
+			    		.attr("transform", "translate(" + marginLeft + ", " + marginTop + ")")
+			    		.style("stroke-width", 1)
+			    		.style("stroke", "#ccc");
+				}
+
+				for (let y = 0; y <= maxPrice; y += 1000) {
+					svg1.append("line")
+			    		.attr("x1", 0)
+			    		.attr("y1", priceScale(y))
+			    		.attr("x2", chartWidth)
+			    		.attr("y2", priceScale(y))
+			    		.attr("transform", "translate(" + marginLeft + ", " + marginTop + ")")
+			    		.style("stroke-width", 1)
+			    		.style("stroke", "#ccc");
+				}
+
+				diamondData.forEach(function(d) {
+					svg1.append("circle")
+						.attr("r", 3)
+						.attr("cx", Math.floor( caratScale(d["carat"])) )
+						.attr("cy", Math.floor( priceScale(d["price"])) )
+						.attr("transform", "translate(" + marginLeft + ", " + marginTop + ")")
+						.attr("opacity", 0.4)
+						.style("fill", "darkblue");
+				})
+
+				
+				// price vs. color_rating svg
+				let svg2 = d3.select("body")
+					.append("svg")
+					.attr("id", "diamonds2")
+					.attr("width", 400)
+					.attr("height", 400)
+					.attr("transform", "translate(25, 0)")
+
+
+				width = svg2.attr("width");
+				height = svg2.attr("height");
+
+				// no padding on x-axis
+				marginLeft = 0;
+				marginRight = 0;
+				marginTop = 5;
+				marginBottom = 0;
+
+				chartWidth = width - marginLeft - marginRight;
+				chartHeight = height - marginTop - marginBottom;
+
+				// color quality goes from high to low, left to right (so 7 is on the left, 1 is on the right)
+				let colorRatingScale = d3.scaleLinear()
+					.domain([0, 8])
+					.range([chartWidth, 0]);
+
+				for (let x = 1; x <= 7; x++) {
+					svg2.append("line")
+			    		.attr("x1", colorRatingScale(x))
+			    		.attr("y1", 0)
+			    		.attr("x2", colorRatingScale(x))
+			    		.attr("y2", chartHeight)
+			    		.attr("transform", "translate(" + marginLeft + ", " + marginTop + ")")
+			    		.style("stroke-width", 1)
+			    		.style("stroke", "#ccc");
+				}
+
+				for (let y = 0; y <= maxPrice; y += 1000) {
+					svg2.append("line")
+			    		.attr("x1", 0)
+			    		.attr("y1", priceScale(y))
+			    		.attr("x2", chartWidth)
+			    		.attr("y2", priceScale(y))
+			    		.attr("transform", "translate(" + marginLeft + ", " + marginTop + ")")
+			    		.style("stroke-width", 1)
+			    		.style("stroke", "#ccc");
+				}
+
+				diamondData.forEach(function(d) {
+					let jitter = (Math.random() * 10) - 5
+
+					svg2.append("circle")
+						.attr("r", 3)
+						.attr("cx", Math.floor(colorRatingScale(d["color_rating"]) + jitter))
+						.attr("cy", Math.floor(priceScale(d["price"])))
+						.attr("transform", "translate(" + marginLeft + ", " + marginTop + ")")
+						.attr("opacity", 0.3)
+						.style("fill", "darkgreen");
+				})
+
+
+				// price_per_carat vs. color_rating svg
+				let svg3 = d3.select("body")
+					.append("svg")
+					.attr("id", "diamonds3")
+					.attr("width", 400)
+					.attr("height", 400)
+					.attr("transform", "translate(50, 0)")
+
+
+				width = svg3.attr("width");
+				height = svg3.attr("height");
+
+				// no padding on x-axis
+				marginLeft = 0;
+				marginRight = 0;
+				marginTop = 5;
+				marginBottom = 0;
+
+				chartWidth = width - marginLeft - marginRight;
+				chartHeight = height - marginTop - marginBottom;
+
+				let maxPricePerCarat = d3.max(diamondData, d => d["price"] / d["carat"]);
+
+				// new y axis
+				let pricePerCaratScale = d3.scaleLinear()
+					.domain([0, maxPricePerCarat])
+					.range([chartHeight, 0]);
+
+				for (let x = 1; x <= 7; x++) {
+					svg3.append("line")
+			    		.attr("x1", colorRatingScale(x))
+			    		.attr("y1", 0)
+			    		.attr("x2", colorRatingScale(x))
+			    		.attr("y2", chartHeight)
+			    		.attr("transform", "translate(" + marginLeft + ", " + marginTop + ")")
+			    		.style("stroke-width", 1)
+			    		.style("stroke", "#ccc");
+				}
+
+				for (let y = 0; y <= maxPricePerCarat; y += 1000) {
+					svg3.append("line")
+			    		.attr("x1", 0)
+			    		.attr("y1", pricePerCaratScale(y))
+			    		.attr("x2", chartWidth)
+			    		.attr("y2", pricePerCaratScale(y))
+			    		.attr("transform", "translate(" + marginLeft + ", " + marginTop + ")")
+			    		.style("stroke-width", 1)
+			    		.style("stroke", "#ccc");
+				}
+
+				diamondData.forEach(function(d) {
+					let jitter = (Math.random() * 10) - 5;
+					let ppc = d["price"] / d["carat"];
+
+					svg3.append("circle")
+						.attr("r", 3)
+						.attr("cx", Math.floor(colorRatingScale(d["color_rating"]) + jitter))
+						.attr("cy", Math.floor(pricePerCaratScale(ppc)))
+						.attr("transform", "translate(" + marginLeft + ", " + marginTop + ")")
+						.attr("opacity", 0.3)
+						.style("fill", "darkred");
+				})
+			}).catch(function(err) {
+				throw err;
+			})
+		</script>
+
+		<b> Red Visualization: Potentially Misleading </b> <br>
+
+		The third visualization could be misleading because there are just a few samples from each color rating that <br> 
+		show an increase in price based on quality, while a majority of the diamonds seem to have no correlation as <br>
+		they are bundled together towards the bottom. These few outliers make it seem like there is an upward <br>
+		trend, when in reality there aren't enough points fitting this pattern to conclude this.
+	</p>
+
+
+</body>
+
+
+</html>

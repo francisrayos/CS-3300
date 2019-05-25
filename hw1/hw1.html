@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>CS 3300: Homework 1 - Francis Rayos del Sol</title>
+</head>
+<body>
+
+<h2>CS 3300: Assignment 1</h2>
+<h3>Francis Rayos del Sol - fmr32</h3>
+
+<p id="p0"><strong>Problem 0: We use the var statement to declare a
+variable and set it to a value.</strong>
+<script>
+var x = 100;
+</script>
+</p>
+
+<p id="p1"><strong>Problem 1: For each of the following visualizations, identify the marks used and visual channels from the list provided. Be as specific as possible. Ignore axes and axis labels.</strong>
+
+<br/>
+<br/>
+
+(a.) The marks are the states and the shapes within the states that indicate the fraction of precipitation lost to evapotranspiration. The channels are the widths and lengths of those shapes as well as the colors and hues that fill up the shapes.
+
+<br/>
+<br/>
+
+(b.) The marks are the dots that show the cookies, pastries, and pizzas. The channels are the colors of the dots as well as the vertical and horizontal position of the dots along each axis.
+
+</p>
+
+<p id="p2"><strong>Problem 2: Identify which of the following are valid Javascript types (i.e. can be returned as output from the typeof() function)...</strong><br/></br>
+
+The only JavaScript types in the list are string, object, number, boolean, function, and null. However, an unusual behavior is that in JavaScript, the type of null comes out to be "object", which is a bug in JS.
+
+<br/>
+
+<script>
+console.log(typeof("hello")) // string
+console.log(typeof({"Age":20})) // object
+console.log(typeof(4.0)) // number
+console.log(typeof(false)) // boolean
+console.log(typeof(null)) // null
+console.log(typeof(alert)) // pretty sure this isn't a type
+</script>
+</p>
+
+<p id="p3"><strong>Problem 3: Each of the following expressions contains an improper JSON string. Calling JSON.parse(...) on them will result in an error. For each example, describe the error and provide a fixed version.</strong><br/><br/>
+
+(a.) The error here was that there was no quotations around the netid.<br/><br/>
+(b.) The error here was that you cannot include a comment inside an object. Therefore, in my solution, I took it out of the object.<br/><br/>
+(c.) The error here was that the list was separated by semicolons instead of commas. <br/><br/>
+(d.) There were multiple errors in this example. First, there was no closing bracket for the list. Also, I needed to include commas in between each object of the list. Finally, in the final key of the the last object, there was a semicolon instead of a colon.<br/><br/>
+
+<script>
+console.log(JSON.parse('{"netid":"jmr305"}'))
+console.log(JSON.parse('{"number":"INFO3300/CS3300/INFO5100"}'))
+console.log(JSON.parse('[3, 4.3, null]'))
+console.log(JSON.parse('[ { "name": "DDWA", "number": 3300 }, { "name": "Java", "number": 2110 }, { "name": "Python", "number": 1110 }]'))
+
+</script>
+</p>
+
+<p id="p4"><strong>Problem 4: Write a JSON expression that represents a list. This list should contain at least three objects. Each object should have at least three properties. The value of one property should be a number, the value of another should be a boolean, and value of a third should be a list of at least two strings. You may define the contents in any way you choose and add additional properties as long as we can easily verify that the required elements are present.</strong><br/><br/>
+
+Please see the console.<br/>
+
+<script>
+
+	var lst =[
+				{
+					"Age": 20,
+					"Legal": false,
+					"Horoscrope": ["October", "Libra"]
+				},
+				{
+					"Age": 21,
+					"Legal": true,
+					"Horoscrope": ["May", "Taurus"]
+				},
+				{
+					"Age": 22,
+					"Legal": true,
+					"Horoscrope": ["June", "Cancer"]
+				},	
+			]
+	console.log(JSON.parse(JSON.stringify((lst))))
+
+</script>
+</p>
+
+<p id="p5"><strong>Problem 5: Describe, in your own words, the course policy on late and unreadable work outlined in the syllabus, which is linked from the course website.</strong><br/><br/>
+
+The course policy on late and unreadable work essentially says that if an assignment isn't submit on time or doesn't have the correct assignment, the grade wil be a zero. In such cases, there will be no exceptions because there are still two homework passes meant for busy weeks. The graders will try to open each file submitted. Finally, if there was an issue uploading through CMS, if there is any timestamped file before submission that was completed, it may be possible to submit that as a result of missing or incorrect work.<br/>
+
+</p>
+
+</body>
+</html>

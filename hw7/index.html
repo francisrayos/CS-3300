@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+<title>CS 3300: Homework 7 - Francis Rayos del Sol</title>
+<script src="https://d3js.org/d3.v5.min.js"></script>
+
+<style>
+	body {
+		font-family: Avenir;
+	}
+</style>
+
+</head>
+<body>
+
+<h2>CS 3300: Assignment 7</h2>
+<h3>Francis Rayos del Sol - fmr32</h3>
+
+	<p id="p1" style="font-style: italic;">Problem 1: In Homework 6, you created a grid of circles to show colors across the HSL color space. In this problem, you will create a smooth, square gradient for the LAB color space using a Canvas pixel array. The LAB color space is a bit tricky. While L, luminosity, is fairly self-evident, A and B have specific perceptual definitions that are not as clear as Hue and Saturation might be conceptually. To get a sense for how A and B work, you will design an interactive tool for exploring different colors. A and B will be mapped to the x- and y-axes of the canvas respectively, and a slider will allow the user to adjust the luminosity of the canvas.</strong></p>
+
+    <p id="p1a"><canvas id="gradient" width="320" height="320" style="background: #F5F5F5"></canvas></p>
+
+    <script>
+        // PART A
+        var canvas = d3.select("#gradient");
+        var new_context = canvas.node().getContext("2d");
+
+        var image = new_context.getImageData(0, 0, canvas.node().width, canvas.node().height);
+        var pixels = image.data;
+
+        // PART B
+        var colorScale = d3.scaleLinear()
+			.domain([0, 320])
+            .range([-160, 160]);
+            
+        function rgbAtLocation (lum, x, y) {
+            var new_lab = d3.lab(lum, colorScale(x), colorScale(y));
+            var new_rgb = d3.rgb(new_lab);
+            return new_rgb;
+        }
+
+        // PART C
+        function fillCanvas(lum) {
+            for (let y = 0; y < 320; y++) {
+                for (let x = 0; x < 320; x++) {
+                    let rgb_object = rgbAtLocation(lum, x, y);
+
+                    pixels[4 * (y * 320 + x)] = rgb_object.r;
+                    pixels[4 * (y * 320 + x) + 1] = rgb_object.g;
+                    pixels[4 * (y * 320 + x) + 2] = rgb_object.b;
+                    pixels[4 * (y * 320 + x) + 3] = 255;
+                }
+            }
+            new_context.putImageData(image, 0, 0);
+        }
+
+        // PART D
+        let new_lum = 110;
+        let newSlider = d3.select("#p1a").append("div");
+
+        function startLum () {
+			fillCanvas(new_lum);
+		}
+
+		let start = startLum();
+
+		newSlider.append("div").text("Lumosity Value Slider")
+			.append("div")
+			.append("input")
+			.attr("type", "range")
+			.attr("class", "slider")
+			.attr("id","slider")
+			.attr("min", 0)
+			.attr("max", 150)
+            .attr("step", 1)
+            .attr("value", new_lum)
+			.on("input", function () {
+				// Updates new lumosity value and updates function
+				new_lum = Number(this.value);
+				fillCanvas(new_lum);
+            });
+    </script>
+
+    <p id="p2" style="font-style: italic;">Problem 2: For this problem, you will visualize two provided datasets, senate.109.rollcall.nodes.csv and senate.109.rollcall.edges.csv. These datasets encode a graph of US Senators during the 109th congress. Edges have been drawn between senators who share similar voting patterns. Senators who almost always disagree will not be connected.</p>
+
+    <p id="p2a"> <svg id="senate" height="400" width="800" style="background: #F5F5F5"></svg></p>
+
+    <script>
+        // PART A
+        let network = d3.select("#senate");
+        let network_g = network.append("g");
+
+        let partyColor = d3.scaleOrdinal()
+            .domain(["Dem", "Rep", "Ind"])
+            .range(["dodgerblue", "firebrick", "gold"]);
+
+        // PART B
+        const requestData = async () => {
+            let edges = await d3.csv("/senate.109.rollcall.edges.csv");
+            let nodes = await d3.csv("/senate.109.rollcall.nodes.csv");
+           
+            let diagram = d3.forceSimulation(nodes)
+                .force("link", d3.forceLink().links(edges).id(function(d) { return d.icpsr }))
+                .force("repulse", d3.forceManyBody().strength(-60))
+                .force("y", d3.forceY().y(d => network.attr("height") / 2).strength(0.1))
+                .force("x", d3.forceX().x(function(d) {
+                    if (d.party == "Dem") {
+                        return network.attr("width") * 0.25;
+                    }
+                    else if (d.party == "Rep") {
+                        return network.attr("width") * 0.75;
+                    }
+                    else { 
+                        return network.attr("width") * 0.5; 
+                    }
+                }).strength(0.1))
+                .on("tick", render);
+
+            // PART C
+            function render() {
+                let new_edge = network_g.selectAll("line").data(edges)
+                    
+                new_edge.enter()
+                    .append("line")
+                    .style("stroke", "slateblue")
+                    .style("stroke-width", 1)
+                    .style("opacity", 1)
+                    .merge(new_edge)
+                    .attr("x1", d => d.source.x)
+                    .attr("x2", d => d.target.x)
+                    .attr("y1", d => d.source.y)
+                    .attr("y2", d => d.target.y);
+
+                let new_node = network_g.selectAll("circle").data(nodes)
+
+                new_node.enter()
+                    .append("circle")
+                    .attr("r", 5)
+				    .style("stroke", "grey")
+                    .style("stroke-width", 1)
+                    .attr("fill", d => partyColor(d.party))
+                    .attr("cx", 0)
+                    .attr("cy", 0)
+                    .merge(new_node)
+                    .attr("transform", d => "translate(" + d.x + "," + d.y + ")");
+                    
+            }
+        }
+        requestData();
+    </script>
+</body>
+</html>
